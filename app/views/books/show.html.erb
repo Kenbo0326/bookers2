@@ -1,0 +1,9 @@
+<h1>Book Detail</h1>
+
+<p>投稿者: <%= @book.user.name %></p>
+<p>タイトル: <%= @book.title %></p>
+<p>本文: <%= @book.body %></p>
+
+<%= link_to "Edit", edit_book_path(@book) %> |
+<%= link_to "Back", books_path %>
+
