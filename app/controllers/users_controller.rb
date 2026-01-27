@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :ensure_correct_user, only: [:edit, :update]
+  before_action :ensure_correct_user, only: [ :edit, :update ]
 
   def new
     @user = User.new
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.turbo_stream
-    end  
+    end
   end
 
   def edit
@@ -52,4 +52,3 @@ end
     params.require(:user).permit(:name, :introduction, :password, :password_confirmation)
   end
 end
-

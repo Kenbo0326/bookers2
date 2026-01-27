@@ -13,8 +13,7 @@ Rails.application.routes.draw do
   post "login" => "sessions#create"
   delete "logout" => "sessions#destroy"
 
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :sessions, only: [ :new, :create, :destroy ]
   resources :books
-  
   get "up" => "rails/health#show", as: :rails_health_check
 end
