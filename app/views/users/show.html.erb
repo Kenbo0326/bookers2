@@ -1,0 +1,43 @@
+<h2>User Info</h2>
+
+<div class="row">
+  <div class="col-md-4">
+
+    <% if @user.profile_image.attached? %>
+      <%= image_tag @user.profile_image, size: "150x150", class: "rounded-circle mb-3" %>
+    <% else %>
+      <%= image_tag "no_image.jpg", size: "150x150", class: "rounded-circle mb-3" %>
+    <% end %>
+
+    <p><strong>Name:</strong> <%= @user.name %></p>
+    <p><strong>Introduction:</strong> <%= @user.introduction %></p>
+
+    <% if @user == current_user %>
+      <%= link_to "Edit Profile", edit_user_path(@user), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-8">
+    <h3>Books</h3>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Body</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @user.books.each do |book| %>
+          <tr>
+            <td><%= book.title %></td>
+            <td><%= book.body %></td>
+            <td><%= link_to "Show", book_path(book), class: "btn btn-sm btn-primary" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
