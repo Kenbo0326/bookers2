@@ -1,19 +1,8 @@
 Rails.application.routes.draw do
-  get "books/index"
-  get "books/show"
-  get "books/edit"
-  get "books/new"
+  root to: 'homes#top'
+  get 'homes/about' => 'homes#about', as: 'about'
 
-  root "homes#top"
-  get "about" => "homes#about"
-
-  resources :users
-
-  get "login" => "sessions#new"
-  post "login" => "sessions#create"
-  delete "logout" => "sessions#destroy"
-
-  resources :sessions, only: [ :new, :create, :destroy ]
+  devise_for :users
   resources :books
-  get "up" => "rails/health#show", as: :rails_health_check
+  resources :users, only: [:show, :edit, :update]
 end

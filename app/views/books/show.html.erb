@@ -1,9 +1,88 @@
-<h1>Book Detail</h1>
+<div class="container mt-4">
+  <div class="row">
 
-<p>投稿者: <%= @book.user.name %></p>
-<p>タイトル: <%= @book.title %></p>
-<p>本文: <%= @book.body %></p>
+    <!-- 左側：User info -->
+    <div class="col-md-3">
+      <%= render "user_info", user: @user, book_new: @book_new %>
+    </div>
 
-<%= link_to "Edit", edit_book_path(@book) %> |
-<%= link_to "Back", books_path %>
+      <h2>User info</h2>
 
+      <% if @user.profile_image.attached? %>
+        <%= image_tag @user.profile_image, size: "100x100" %>
+      <% else %>
+        <%= image_tag "no_image.jpg", size: "100x100" %>
+      <% end %>
+
+      <p><strong>Name:</strong> <%= @user.name %></p>
+      <p><strong>Introduction:</strong> <%= @user.introduction %></p>
+
+      <%= link_to "Edit profile", edit_user_path(@user), class: "btn btn-outline-secondary mb-4" %>
+
+      <!-- New book -->
+      <h2>New book</h2>
+
+      <%= form_with model: @book_new do |f| %>
+        <div class="field">
+          <%= f.label :title %>
+          <%= f.text_field :title, class: "form-control" %>
+        </div>
+
+        <div class="field mt-2">
+          <%= f.label :body %>
+          <%= f.text_area :body, class: "form-control" %>
+        </div>
+
+        <%= f.submit "Create Book", class: "btn btn-primary mt-3" %>
+      <% end %>
+
+    </div>
+
+    <!-- 右側：Book 詳細 -->
+    <div class="col-md-9">
+
+      <h2>Book detail</h2>
+
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>User</th>
+            <td>
+              <% if @user.profile_image.attached? %>
+                <%= image_tag @user.profile_image, size: "50x50" %>
+              <% else %>
+                <%= image_tag "no_image.jpg", size: "50x50" %>
+              <% end %>
+              <br>
+              <%= link_to @user.name, user_path(@user) %>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Title</th>
+            <td><%= @book.title %></td>
+          </tr>
+
+          <tr>
+            <th>Body</th>
+            <td><%= @book.body %></td>
+          </tr>
+
+          <tr>
+            <th>Actions</th>
+            <td>
+              <% if @book.user == current_user %>
+                <%= link_to "Edit", edit_book_path(@book), class: "btn btn-success me-2" %>
+                <%= link_to "Destroy", book_path(@book),
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                      class: "btn btn-danger" %>
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>

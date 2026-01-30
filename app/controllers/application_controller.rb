@@ -1,9 +1,20 @@
 class ApplicationController < ActionController::Base
-  before_action :set_current_user
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate_user!
+  
+  protected
 
-  private
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:name])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :introduction, :profile_image])
+  end
 
-  def set_current_user
-    Current.user = User.find_by(id: session[:user_id])
+  def after_sign_in_path_for(resource)
+    user_path(resource)
+  end
+
+  def after_sign_out_path_for(resource)
+    root_path
   end
 end

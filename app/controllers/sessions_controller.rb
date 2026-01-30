@@ -1,21 +1,25 @@
 class SessionsController < ApplicationController
+  before_action :require_authentication,only:[:destroy]
+
   def new
   end
 
   def create
-    user = User.find_by(name: params[:name])
-
-    if user&.authenticate(params[:password])
-      session[:user_id] = user.id
-      redirect_to user_path(user), notice: "successfully logged in."
+    if (user = User.find_by(name: params[:name]))&.authenticate(params[:password]) # この行を変更
+      start_new_session_for user
+      redirect_to after_authentication_url
     else
-      flash.now[:alert] = "error: login failed."
-      render :new, status: :unprocessable_entity
+      redirect_to new_session_path, alert: "Try another name or password."
     end
   end
 
   def destroy
-    session.delete(:user_id)
-    redirect_to root_path, notice: "successfully logged out."
+    terminate_session
+    redirect_to new_session_path
+  end
+  private
+
+  def require_authentication
+    redirect_to new_session_path unless Current.user
   end
 end

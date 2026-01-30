@@ -1,56 +1,87 @@
-<h1>Books</h1>
+<div class="container mt-4">
+  <div class="row">
 
-<!-- エラーメッセージ表示 -->
-<% if @book.errors.any? %>
-  <div class="error-messages">
-    <h2><%= @book.errors.count %> errors prohibited this book from being saved:</h2>
-    <ul>
-      <% @book.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+    <!-- 左側：User info + New book -->
+    <div class="col-md-3">
+      <%= render "user_info", user: @user, book_new: @book %>
+    </div>
+
+      <!-- User info -->
+      <h2>User info</h2>
+
+      <% if @user.profile_image.attached? %>
+        <%= image_tag @user.profile_image, size: "100x100" %>
+      <% else %>
+        <%= image_tag "no_image.jpg", size: "100x100" %>
       <% end %>
-    </ul>
+
+      <p><strong>Name:</strong> <%= @user.name %></p>
+      <p><strong>Introduction:</strong> <%= @user.introduction %></p>
+
+      <%= link_to "Edit profile", edit_user_path(@user), class: "btn btn-outline-secondary mb-4" %>
+
+      <!-- New book -->
+      <h2>New book</h2>
+
+      <% if @book.errors.any? %>
+        <div class="error_explanation">
+          <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+          <ul>
+           <% @book.errors.full_messages.each do |message| %>
+             <li><%= message %></li>
+           <% end %>
+          </ul>
+         </div>
+      <% end %>
+      <%= form_with model: @book do |f| %>
+        <div class="field">
+          <%= f.label :title %>
+          <%= f.text_field :title, class: "form-control" %>
+        </div>
+
+        <div class="field mt-2">
+          <%= f.label :body %>
+          <%= f.text_area :body, class: "form-control" %>
+        </div>
+
+        <%= f.submit "Create Book", class: "btn btn-primary mt-3" %>
+      <% end %>
+
+    </div>
+
+    <!-- 右側：Books 一覧 -->
+    <div class="col-md-9">
+      <h2>Books</h2>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Title</th>
+            <th>Body</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @books.each do |book| %>
+            <tr>
+              <td>
+                <% if book.user.profile_image.attached? %>
+                  <%= image_tag book.user.profile_image, size: "50x50" %>
+                <% else %>
+                  <%= image_tag "no_image.jpg", size: "50x50" %>
+                <% end %>
+                <br>
+                <%= link_to book.user.name, user_path(book.user) %>
+              </td>
+
+              <td><%= link_to book.title, book_path(book) %></td>
+              <td><%= book.body %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
   </div>
-<% end %>
-
-<!-- 新規投稿フォーム -->
-<%= form_with model: @book, local: true do |f| %>
-  <div>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </div>
-
-  <div>
-    <%= f.label :body %>
-    <%= f.text_area :body %>
-  </div>
-
-  <%= f.submit "Create Book" %>
-<% end %>
-
-<hr>
-
-<!-- 投稿一覧 -->
-<table>
-  <thead>
-    <tr>
-      <th>投稿者</th>
-      <th>タイトル</th>
-      <th>本文</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @books.each do |book| %>
-      <tr>
-        <td><%= book.user.name %></td>
-        <td><%= book.title %></td>
-        <td><%= book.body %></td>
-        <td>
-          <%= link_to "Show", book_path(book) %> |
-          <%= link_to "Destroy", book_path(book), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class:  "btn btn-danger" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+</div>

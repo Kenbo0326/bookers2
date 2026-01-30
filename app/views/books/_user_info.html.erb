@@ -1,0 +1,31 @@
+<!-- User info -->
+<h2>User info</h2>
+<% @user = local_assigns[:user] %>
+<% @book_new = local_assigns[:book_new] %>
+<% if @user.profile_image.attached? %>
+  <%= image_tag @user.profile_image, size: "100x100" %>
+<% else %>
+  <%= image_tag "no_image.jpg", size: "100x100" %>
+<% end %>
+
+<p><strong>Name:</strong> <%= @user.name %></p>
+<p><strong>Introduction:</strong> <%= @user.introduction %></p>
+
+<%= link_to "Edit profile", edit_user_path(@user), class: "btn btn-outline-secondary mb-4" %>
+
+<!-- New book -->
+<h2>New book</h2>
+
+<%= form_with model: @book_new do |f| %>
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="field mt-2">
+    <%= f.label :body %>
+    <%= f.text_area :body, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Create Book", class: "btn btn-primary mt-3" %>
+<% end %>

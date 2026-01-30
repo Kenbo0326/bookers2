@@ -1,32 +1,48 @@
-<h1>User Profile</h1>
+<div class="container mt-4">
+  <div class="row">
 
-<p>名前: <%= @user.name %></p>
-<p>紹介文: <%= @user.introduction %></p>
+    <!-- 左側：User info + New book（部分テンプレート） -->
+    <div class="col-md-3">
+      <%= render "books/user_info", user: @user, book_new: @book_new %>
+    </div>
 
-<% if @user == Current.user %>
-  <%= link_to "Edit Profile", edit_user_path(@user) %>
-<% end %>
+    <!-- 右側：User の投稿一覧 -->
+    <div class="col-md-9">
+      <h2><%= @user.name %>'s Books</h2>
 
-<hr>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Body</th>
+            <th>Show</th>
+          </tr>
+        </thead>
 
-<h2>このユーザーの投稿一覧</h2>
+        <tbody>
+          <% @books.each do |book| %>
+            <tr>
+              <td>
+                <% if @user.profile_image.attached? %>
+                  <%= image_tag @user.profile_image, size: "50x50" %>
+                <% else %>
+                  <%= image_tag "no_image.jpg", size: "50x50" %>
+                <% end %>
+              </td>
 
-<table>
-  <thead>
-    <tr>
-      <th>タイトル</th>
-      <th>本文</th>
-      <th></th>
-    </tr>
-  </thead>
+              <td><%= book.title %></td>
+              <td><%= book.body %></td>
 
-  <tbody>
-    <% @user.books.each do |book| %>
-      <tr>
-        <td><%= book.title %></td>
-        <td><%= book.body %></td>
-        <td><%= link_to "Show", book_path(book) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+              <td>
+                <%= link_to "Show", book_path(book), class: "btn btn-outline-primary" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>

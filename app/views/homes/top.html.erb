@@ -1,8 +1,7 @@
-<h1>Welcome to Bookers2</h1>
-<p>本の感想を投稿して共有できるアプリです。</p>
+<h1>Top</h1>
+<h1>Welcome to Bookers2!</h1>
 
-<% if Current.user %>
-  <p><%= link_to "Booksへ進む", books_path %></p>
-<% else %>
-  <p><%= link_to "ログイン", login_path %> または <%= link_to "新規登録", new_user_path %></p>
-<% end %>
+<div class="mt-4">
+  <%= link_to "Log in", new_user_session_path, class: "btn btn-primary me-2" %>
+  <%= link_to "Sign up", new_user_registration_path, class: "btn btn-success" %>
+</div>
